@@ -1,0 +1,1 @@
+npm run format:check || (echo "❌ Code formatting issues found. Run 'npm run format' to fix." && exit 1)
