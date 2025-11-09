@@ -4,6 +4,7 @@ import {
   formatCostCode,
   calculateUtilization,
   getUtilizationColor,
+  capitalize,
 } from './format';
 
 describe('formatCurrency', () => {
@@ -87,5 +88,43 @@ describe('getUtilizationColor', () => {
     expect(getUtilizationColor(90)).toBe('bg-red-500');
     expect(getUtilizationColor(95)).toBe('bg-red-500');
     expect(getUtilizationColor(100)).toBe('bg-red-500');
+  });
+
+  it('should return dark red for over budget', () => {
+    expect(getUtilizationColor(101)).toBe('bg-red-600');
+    expect(getUtilizationColor(150)).toBe('bg-red-600');
+    expect(getUtilizationColor(200)).toBe('bg-red-600');
+  });
+});
+
+describe('capitalize', () => {
+  it('should capitalize first letter and lowercase rest', () => {
+    expect(capitalize('hello')).toBe('Hello');
+    expect(capitalize('world')).toBe('World');
+    expect(capitalize('test')).toBe('Test');
+  });
+
+  it('should handle all uppercase input', () => {
+    expect(capitalize('HELLO')).toBe('Hello');
+    expect(capitalize('WORLD')).toBe('World');
+  });
+
+  it('should handle all lowercase input', () => {
+    expect(capitalize('hello')).toBe('Hello');
+    expect(capitalize('world')).toBe('World');
+  });
+
+  it('should handle mixed case input', () => {
+    expect(capitalize('hELLO')).toBe('Hello');
+    expect(capitalize('WoRlD')).toBe('World');
+  });
+
+  it('should handle single character', () => {
+    expect(capitalize('a')).toBe('A');
+    expect(capitalize('Z')).toBe('Z');
+  });
+
+  it('should handle empty string', () => {
+    expect(capitalize('')).toBe('');
   });
 });

@@ -110,10 +110,11 @@ export const DepartmentManagementModal: React.FC<DepartmentManagementModalProps>
 
             {(mode === 'rename' || mode === 'add') && (
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="dept-name" className="block text-sm font-medium text-gray-700 mb-2">
                   Department Name
                 </label>
                 <input
+                  id="dept-name"
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
@@ -127,7 +128,10 @@ export const DepartmentManagementModal: React.FC<DepartmentManagementModalProps>
 
             {(mode === 'add' || mode === 'move') && (
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="dept-parent"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   Parent Department
                   {mode === 'add' && !department && (
                     <span className="ml-2 text-xs text-blue-600 font-normal">
@@ -136,6 +140,7 @@ export const DepartmentManagementModal: React.FC<DepartmentManagementModalProps>
                   )}
                 </label>
                 <select
+                  id="dept-parent"
                   value={parentId ?? ''}
                   onChange={(e) => setParentId(e.target.value ? Number(e.target.value) : null)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
