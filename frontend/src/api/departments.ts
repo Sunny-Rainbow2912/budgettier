@@ -1,6 +1,11 @@
 import type { Department, UpdateBudgetRequest } from '../types/department';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+// In production (Heroku), use empty string for relative URLs since backend serves frontend
+// In development, use localhost:3000
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL !== undefined
+    ? import.meta.env.VITE_API_BASE_URL
+    : 'http://localhost:3000';
 
 export const departmentsApi = {
   async getDepartments(): Promise<Department[]> {
