@@ -16,10 +16,16 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  it('/ (GET)', () => {
+  it('/api/health (GET)', () => {
     return request(app.getHttpServer())
-      .get('/')
+      .get('/api/health')
       .expect(200)
-      .expect('Hello World!');
+      .expect((res) => {
+        expect(res.body).toHaveProperty('status', 'ok');
+        expect(res.body).toHaveProperty('service', 'budgettier-api');
+        expect(res.body).toHaveProperty('version', '1.0.0');
+        expect(res.body).toHaveProperty('timestamp');
+        expect(typeof res.body.timestamp).toBe('string');
+      });
   });
 });
