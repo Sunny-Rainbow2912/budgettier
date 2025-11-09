@@ -240,6 +240,47 @@ Total budget: **$2.41M allocated**, **$2.06M spent** (~85.5% utilization)
 
 - Delete `backend/budgettier.db` and run `npm run seed` again
 
+## Deployment
+
+### Deploy to Heroku
+
+Budgettier is ready for one-click deployment to Heroku:
+
+[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
+**Or deploy manually:**
+
+```bash
+# Login to Heroku
+heroku login
+
+# Create app
+heroku create your-app-name
+
+# Deploy
+git push heroku main
+
+# Open app
+heroku open
+```
+
+**What happens on deployment:**
+
+1. Heroku installs dependencies
+2. Builds frontend (React → static files)
+3. Builds backend (NestJS → production)
+4. Seeds database with sample data
+5. Backend serves frontend automatically
+
+**Configuration:**
+
+- No additional setup needed!
+- Frontend served from same origin as backend
+- SQLite database included (auto-seeded)
+- For production, consider upgrading to PostgreSQL
+
+See [HEROKU_DEPLOYMENT.md](./HEROKU_DEPLOYMENT.md) for detailed deployment guide.
+
 ## License
 
 MIT

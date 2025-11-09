@@ -1,0 +1,6 @@
+# Ensure line endings are correct
+* text=auto eol=lf
+
+# Procfile should have Unix line endings for Heroku
+Procfile text eol=lf
+

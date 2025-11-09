@@ -21,7 +21,7 @@ export const BaseTreeRow: React.FC<BaseTreeRowProps> = ({
   children,
   renderExpandButton = true,
 }) => {
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded] = useState(true);
   const hasChildren = department.children.length > 0;
   const indent = level * 24;
 
@@ -58,7 +58,7 @@ export const TreeCell: React.FC<TreeCellProps> = ({
   showLeafBadge = true,
 }) => {
   return (
-    <div className="flex items-center">
+    <div className="flex items-center" style={{ paddingLeft: `${indent}px` }}>
       {hasChildren && (
         <button
           onClick={onToggle}

@@ -1,0 +1,29 @@
+{
+  "name": "Budgettier",
+  "description": "Hierarchical Budget Management System - Track and manage departmental budgets with real-time aggregation",
+  "repository": "https://github.com/YOUR_USERNAME/budgettier",
+  "logo": "",
+  "keywords": ["budget", "finance", "nestjs", "react", "typescript", "hierarchical-data"],
+  "stack": "heroku-24",
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ],
+  "env": {
+    "NODE_ENV": {
+      "description": "Environment mode",
+      "value": "production"
+    },
+    "PORT": {
+      "description": "Port for the backend server",
+      "value": "3000"
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "basic"
+    }
+  }
+}

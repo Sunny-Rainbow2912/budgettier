@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "description": "Hierarchical Budget Management System",
+  "engines": {
+    "node": "24.x",
+    "npm": "10.x"
+  },
   "scripts": {
     "prepare": "husky",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,css,md}\"",
@@ -11,7 +15,9 @@
     "backend:build": "cd backend && npm run build",
     "frontend:dev": "cd frontend && npm run dev",
     "frontend:build": "cd frontend && npm run build",
-    "dev": "concurrently \"npm run backend:dev\" \"npm run frontend:dev\""
+    "dev": "concurrently \"npm run backend:dev\" \"npm run frontend:dev\"",
+    "heroku-postbuild": "npm run frontend:build && npm run backend:build && cd backend && npm run seed",
+    "start": "cd backend && npm run start:prod"
   },
   "devDependencies": {
     "husky": "^9.1.7",
