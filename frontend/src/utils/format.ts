@@ -7,11 +7,15 @@ export const formatCurrency = (amount: number): string => {
   }).format(amount);
 };
 
+/**
+ * Capitalizes the first letter of a string and lowercases the rest
+ */
+export const capitalize = (str: string): string => {
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+};
+
 export const formatCostCode = (costCode: string): string => {
-  return costCode
-    .split('_')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-    .join(' ');
+  return costCode.split('_').map(capitalize).join(' ');
 };
 
 export const calculateUtilization = (spent: number, allocated: number): number => {

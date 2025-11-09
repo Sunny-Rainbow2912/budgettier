@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { useDepartments } from '../context/DepartmentContext';
 import { DepartmentRow } from '../components/DepartmentRow';
+import { LoadingSpinner } from '../components/LoadingSpinner';
+import { ErrorMessage } from '../components/ErrorMessage';
 
 export const BudgetManagement: React.FC = () => {
   const { departments, loading, error, loadDepartments, updateDepartmentBudget } = useDepartments();
@@ -14,29 +16,11 @@ export const BudgetManagement: React.FC = () => {
   };
 
   if (loading && departments.length === 0) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading departments...</p>
-        </div>
-      </div>
-    );
+    return <LoadingSpinner message="Loading departments..." />;
   }
 
   if (error) {
-    return (
-      <div className="p-4 bg-red-100 border border-red-400 text-red-700 rounded">
-        <h3 className="font-bold">Error</h3>
-        <p>{error}</p>
-        <button
-          onClick={loadDepartments}
-          className="mt-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-        >
-          Retry
-        </button>
-      </div>
-    );
+    return <ErrorMessage message={error} onRetry={loadDepartments} />;
   }
 
   return (

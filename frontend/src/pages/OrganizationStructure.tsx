@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { ChevronDown, ChevronRight, Pencil, Plus, Trash2 } from 'lucide-react';
+import { Pencil, Plus, Trash2 } from 'lucide-react';
 import { useDepartments } from '../context/DepartmentContext';
 import type { Department } from '../types/department';
 import { DepartmentManagementModal } from '../components/DepartmentManagementModal';
 import { ConfirmDialog } from '../components/ConfirmDialog';
+import { LoadingSpinner } from '../components/LoadingSpinner';
+import { ErrorMessage } from '../components/ErrorMessage';
+import { Button } from '../components/Button';
+import { TreeCell } from '../components/BaseTreeRow';
 
 interface OrgRowProps {
   department: Department;
@@ -28,52 +32,36 @@ const OrganizationRow: React.FC<OrgRowProps> = ({
     <>
       <tr className="border-b hover:bg-gray-50">
         <td className="py-3 px-4" style={{ paddingLeft: `${16 + indent}px` }}>
-          <div className="flex items-center">
-            {hasChildren && (
-              <button
-                onClick={() => setIsExpanded(!isExpanded)}
-                className="mr-2 text-gray-600 hover:text-gray-900 focus:outline-none"
-              >
-                {isExpanded ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
-              </button>
-            )}
-            {!hasChildren && <span className="mr-2 w-4"></span>}
-            <span className={department.isLeaf ? 'text-gray-700' : 'font-medium text-gray-900'}>
-              {department.name}
-            </span>
-            {department.isLeaf && (
-              <span className="ml-2 text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded">
-                Leaf
-              </span>
-            )}
-          </div>
+          <TreeCell
+            department={department}
+            indent={indent}
+            isExpanded={isExpanded}
+            hasChildren={hasChildren}
+            onToggle={() => setIsExpanded(!isExpanded)}
+          />
         </td>
         <td className="py-3 px-4 text-center text-gray-600">
           {hasChildren ? `${department.children.length} children` : 'Leaf department'}
         </td>
         <td className="py-3 px-4 text-center">
           <div className="flex gap-2 justify-center">
-            <button
+            <Button
+              variant="secondary"
               onClick={() => onRename(department)}
-              className="p-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
               title="Rename Department"
             >
               <Pencil size={16} />
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="success"
               onClick={() => onAddChild(department)}
-              className="p-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
               title="Add Child Department"
             >
               <Plus size={16} />
-            </button>
-            <button
-              onClick={() => onDelete(department)}
-              className="p-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
-              title="Delete Department"
-            >
+            </Button>
+            <Button variant="danger" onClick={() => onDelete(department)} title="Delete Department">
               <Trash2 size={16} />
-            </button>
+            </Button>
           </div>
         </td>
       </tr>
@@ -204,29 +192,11 @@ export const OrganizationStructure: React.FC = () => {
   };
 
   if (loading && departments.length === 0) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading organization structure...</p>
-        </div>
-      </div>
-    );
+    return <LoadingSpinner message="Loading organization structure..." />;
   }
 
   if (error) {
-    return (
-      <div className="p-4 bg-red-100 border border-red-400 text-red-700 rounded">
-        <h3 className="font-bold">Error</h3>
-        <p>{error}</p>
-        <button
-          onClick={loadDepartments}
-          className="mt-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-        >
-          Retry
-        </button>
-      </div>
-    );
+    return <ErrorMessage message={error} onRetry={loadDepartments} />;
   }
 
   return (
@@ -238,12 +208,9 @@ export const OrganizationStructure: React.FC = () => {
             Manage your organizational hierarchy - add, rename, and delete departments
           </p>
         </div>
-        <button
-          onClick={handleAddRoot}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-colors shadow-sm"
-        >
+        <Button onClick={handleAddRoot} size="md">
           Add Root Department
-        </button>
+        </Button>
       </div>
 
       <div className="overflow-x-auto shadow-md rounded-lg">

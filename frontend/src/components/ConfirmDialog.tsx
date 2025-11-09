@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AlertTriangle, X } from 'lucide-react';
+import { Button, type ButtonVariant } from './Button';
 
 interface ConfirmDialogProps {
   isOpen: boolean;
@@ -58,10 +59,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   const bgColor = variant === 'danger' ? 'bg-red-50' : 'bg-yellow-50';
   const borderColor = variant === 'danger' ? 'border-red-200' : 'border-yellow-200';
   const iconColor = variant === 'danger' ? 'text-red-600' : 'text-yellow-600';
-  const buttonColor =
-    variant === 'danger'
-      ? 'bg-red-600 hover:bg-red-700 disabled:bg-red-300'
-      : 'bg-yellow-600 hover:bg-yellow-700 disabled:bg-yellow-300';
+  const buttonVariant: ButtonVariant = variant === 'danger' ? 'danger' : 'warning';
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -127,19 +125,16 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
 
         {/* Footer */}
         <div className="px-6 py-4 border-t border-gray-200 flex justify-end gap-3">
-          <button
-            onClick={handleCancel}
-            className="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors font-medium"
-          >
+          <Button variant="outline" onClick={handleCancel}>
             {cancelText}
-          </button>
-          <button
+          </Button>
+          <Button
+            variant={buttonVariant}
             onClick={handleConfirm}
             disabled={requiresTyping && typedWord !== confirmationWord}
-            className={`px-4 py-2 text-white rounded-md transition-colors font-medium ${buttonColor} disabled:cursor-not-allowed`}
           >
             {confirmText}
-          </button>
+          </Button>
         </div>
       </div>
     </div>

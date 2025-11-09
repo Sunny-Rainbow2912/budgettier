@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import type { Department } from '../types/department';
+import { Button } from './Button';
 
 interface DepartmentManagementModalProps {
   isOpen: boolean;
@@ -158,21 +159,12 @@ export const DepartmentManagementModal: React.FC<DepartmentManagementModalProps>
           </div>
 
           <div className="px-6 py-4 border-t border-gray-200 flex justify-end gap-3">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors"
-              disabled={isSubmitting}
-            >
+            <Button type="button" variant="neutral" onClick={onClose} disabled={isSubmitting}>
               Cancel
-            </button>
-            <button
-              type="submit"
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50"
-              disabled={isSubmitting}
-            >
+            </Button>
+            <Button type="submit" variant="primary" disabled={isSubmitting}>
               {isSubmitting ? 'Saving...' : 'Save'}
-            </button>
+            </Button>
           </div>
         </form>
       </div>

@@ -53,9 +53,9 @@ describe('calculateUtilization', () => {
     expect(calculateUtilization(0, 0)).toBe(0);
   });
 
-  it('should cap at 100%', () => {
-    expect(calculateUtilization(150, 100)).toBe(100);
-    expect(calculateUtilization(200, 100)).toBe(100);
+  it('should allow values over 100%', () => {
+    expect(calculateUtilization(150, 100)).toBe(150);
+    expect(calculateUtilization(200, 100)).toBe(200);
   });
 
   it('should handle decimal values', () => {

@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
-import { ChevronDown, ChevronRight } from 'lucide-react';
 import type { Department } from '../types/department';
 import { CostCode } from '../types/department';
-import { formatCurrency, calculateUtilization, getUtilizationColor } from '../utils/format';
+import {
+  formatCurrency,
+  calculateUtilization,
+  getUtilizationColor,
+  capitalize,
+} from '../utils/format';
+import { Button } from './Button';
+import { TreeCell } from './BaseTreeRow';
 
 interface DepartmentRowProps {
   department: Department;
@@ -138,25 +144,13 @@ export const DepartmentRow: React.FC<DepartmentRowProps> = ({ department, level,
     <>
       <tr className="border-b hover:bg-gray-50">
         <td className="py-3 px-4" style={{ paddingLeft: `${16 + indent}px` }}>
-          <div className="flex items-center">
-            {hasChildren && (
-              <button
-                onClick={() => setIsExpanded(!isExpanded)}
-                className="mr-2 text-gray-600 hover:text-gray-900 focus:outline-none"
-              >
-                {isExpanded ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
-              </button>
-            )}
-            {!hasChildren && <span className="mr-2 w-4"></span>}
-            <span className={department.isLeaf ? 'text-gray-700' : 'font-medium text-gray-900'}>
-              {department.name}
-            </span>
-            {department.isLeaf && (
-              <span className="ml-2 text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded">
-                Leaf
-              </span>
-            )}
-          </div>
+          <TreeCell
+            department={department}
+            indent={indent}
+            isExpanded={isExpanded}
+            hasChildren={hasChildren}
+            onToggle={() => setIsExpanded(!isExpanded)}
+          />
         </td>
         <td className="py-3 px-4 text-right text-gray-900">{formatCurrency(totalAllocated)}</td>
         <td className="py-3 px-4 text-right text-gray-900">{formatCurrency(totalSpent)}</td>
@@ -177,30 +171,18 @@ export const DepartmentRow: React.FC<DepartmentRowProps> = ({ department, level,
         </td>
         <td className="py-3 px-4 text-center">
           {department.isLeaf && !isEditing && (
-            <button
-              onClick={handleEditClick}
-              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm font-medium transition-colors shadow-sm"
-              title="Edit"
-            >
+            <Button onClick={handleEditClick} title="Edit" size="sm">
               Edit
-            </button>
+            </Button>
           )}
           {isEditing && (
             <div className="flex gap-2 justify-center">
-              <button
-                onClick={handleSaveEdit}
-                disabled={isSaving}
-                className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 text-sm font-medium transition-colors disabled:opacity-50 shadow-sm"
-              >
+              <Button variant="success" onClick={handleSaveEdit} disabled={isSaving} size="sm">
                 {isSaving ? 'Saving...' : 'Save'}
-              </button>
-              <button
-                onClick={handleCancelEdit}
-                disabled={isSaving}
-                className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 text-sm font-medium transition-colors disabled:opacity-50 shadow-sm"
-              >
+              </Button>
+              <Button variant="secondary" onClick={handleCancelEdit} disabled={isSaving} size="sm">
                 Cancel
-              </button>
+              </Button>
             </div>
           )}
         </td>
@@ -232,14 +214,11 @@ export const DepartmentRow: React.FC<DepartmentRowProps> = ({ department, level,
                       >
                         {getAvailableCostCodes(index).map((code) => (
                           <option key={code} value={code}>
-                            {code.charAt(0).toUpperCase() + code.slice(1).toLowerCase()}
+                            {capitalize(code)}
                           </option>
                         ))}
                         {!getAvailableCostCodes(index).includes(item.costCode) && (
-                          <option value={item.costCode}>
-                            {item.costCode.charAt(0).toUpperCase() +
-                              item.costCode.slice(1).toLowerCase()}
-                          </option>
+                          <option value={item.costCode}>{capitalize(item.costCode)}</option>
                         )}
                       </select>
                     </div>

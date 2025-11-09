@@ -6,7 +6,7 @@ import type { Department } from '../types/department';
 import { CostCode } from '../types/department';
 
 describe('DepartmentRow', () => {
-  const mockOnEdit = vi.fn();
+  const mockOnSave = vi.fn();
 
   const createMockDepartment = (overrides?: Partial<Department>): Department => ({
     id: 1,
@@ -35,7 +35,7 @@ describe('DepartmentRow', () => {
   it('should render department name', () => {
     const department = createMockDepartment({ name: 'Engineering' });
 
-    render(<DepartmentRow department={department} level={0} onEdit={mockOnEdit} />);
+    render(<DepartmentRow department={department} level={0} onSave={mockOnSave} />);
 
     expect(screen.getByText('Engineering')).toBeInTheDocument();
   });
@@ -43,7 +43,7 @@ describe('DepartmentRow', () => {
   it('should display "Leaf" badge for leaf departments', () => {
     const department = createMockDepartment({ isLeaf: true });
 
-    render(<DepartmentRow department={department} level={0} onEdit={mockOnEdit} />);
+    render(<DepartmentRow department={department} level={0} onSave={mockOnSave} />);
 
     expect(screen.getByText('Leaf')).toBeInTheDocument();
   });
@@ -57,7 +57,7 @@ describe('DepartmentRow', () => {
     const { container } = render(
       <table>
         <tbody>
-          <DepartmentRow department={department} level={0} onEdit={mockOnEdit} />
+          <DepartmentRow department={department} level={0} onSave={mockOnSave} />
         </tbody>
       </table>,
     );
@@ -72,7 +72,7 @@ describe('DepartmentRow', () => {
   it('should show Edit button for leaf departments', () => {
     const department = createMockDepartment({ isLeaf: true });
 
-    render(<DepartmentRow department={department} level={0} onEdit={mockOnEdit} />);
+    render(<DepartmentRow department={department} level={0} onSave={mockOnSave} />);
 
     expect(screen.getByText('Edit')).toBeInTheDocument();
   });
@@ -83,7 +83,7 @@ describe('DepartmentRow', () => {
       children: [],
     });
 
-    render(<DepartmentRow department={department} level={0} onEdit={mockOnEdit} />);
+    render(<DepartmentRow department={department} level={0} onSave={mockOnSave} />);
 
     // Get the first row (parent) only
     const rows = screen.getAllByRole('row');
@@ -93,15 +93,17 @@ describe('DepartmentRow', () => {
     expect(parentRow.textContent).not.toContain('Edit');
   });
 
-  it('should call onEdit when Edit button is clicked', () => {
+  it('should show inline edit form when Edit button is clicked', () => {
     const department = createMockDepartment({ isLeaf: true });
 
-    render(<DepartmentRow department={department} level={0} onEdit={mockOnEdit} />);
+    render(<DepartmentRow department={department} level={0} onSave={mockOnSave} />);
 
     const editButton = screen.getByText('Edit');
     fireEvent.click(editButton);
 
-    expect(mockOnEdit).toHaveBeenCalledWith(department);
+    // Should show Save and Cancel buttons when editing
+    expect(screen.getByText('Save')).toBeInTheDocument();
+    expect(screen.getByText('Cancel')).toBeInTheDocument();
   });
 
   it('should display formatted budget amounts', () => {
@@ -118,7 +120,7 @@ describe('DepartmentRow', () => {
       },
     });
 
-    render(<DepartmentRow department={department} level={0} onEdit={mockOnEdit} />);
+    render(<DepartmentRow department={department} level={0} onSave={mockOnSave} />);
 
     expect(screen.getByText('$105,000')).toBeInTheDocument(); // Total allocated
     expect(screen.getByText('$84,000')).toBeInTheDocument(); // Total spent
@@ -138,7 +140,7 @@ describe('DepartmentRow', () => {
       },
     });
 
-    render(<DepartmentRow department={department} level={0} onEdit={mockOnEdit} />);
+    render(<DepartmentRow department={department} level={0} onSave={mockOnSave} />);
 
     expect(screen.getByText('75%')).toBeInTheDocument();
   });
@@ -153,7 +155,7 @@ describe('DepartmentRow', () => {
       ],
     });
 
-    render(<DepartmentRow department={department} level={0} onEdit={mockOnEdit} />);
+    render(<DepartmentRow department={department} level={0} onSave={mockOnSave} />);
 
     expect(screen.getByText('Parent')).toBeInTheDocument();
     expect(screen.getByText('Child 1')).toBeInTheDocument();
@@ -170,7 +172,7 @@ describe('DepartmentRow', () => {
     const { container } = render(
       <table>
         <tbody>
-          <DepartmentRow department={department} level={0} onEdit={mockOnEdit} />
+          <DepartmentRow department={department} level={0} onSave={mockOnSave} />
         </tbody>
       </table>,
     );
