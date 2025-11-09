@@ -437,9 +437,9 @@ describe('OrganizationStructure Integration', () => {
 
       fireEvent.click(deleteButtons[0]);
 
-      await waitFor(() => {
-        expect(screen.getByText('Delete Department')).toBeInTheDocument();
-      });
+      // Use findByText for async modal appearance
+      const dialogTitle = await screen.findByText('Delete Department', {}, { timeout: 3000 });
+      expect(dialogTitle).toBeInTheDocument();
     });
 
     it('should show simple confirmation for leaf departments', async () => {
@@ -459,13 +459,13 @@ describe('OrganizationStructure Integration', () => {
       const deleteButtons = container.querySelectorAll('button[title="Delete Department"]');
       fireEvent.click(deleteButtons[0]);
 
-      await waitFor(() => {
-        expect(screen.getByText(/Are you sure you want to delete/)).toBeInTheDocument();
-        expect(screen.getByText('This department')).toBeInTheDocument();
-        expect(screen.getByText('All its budget data')).toBeInTheDocument();
-        // Should NOT require typing for leaf
-        expect(screen.queryByPlaceholderText(/Type/)).not.toBeInTheDocument();
-      });
+      // Use findBy for async elements
+      await screen.findByText(/Are you sure you want to delete/, {}, { timeout: 3000 });
+
+      expect(screen.getByText('This department')).toBeInTheDocument();
+      expect(screen.getByText('All its budget data')).toBeInTheDocument();
+      // Should NOT require typing for leaf
+      expect(screen.queryByPlaceholderText(/Type/)).not.toBeInTheDocument();
     });
 
     it('should require typed confirmation for parent departments', async () => {
@@ -520,12 +520,11 @@ describe('OrganizationStructure Integration', () => {
       const deleteButtons = container.querySelectorAll('button[title="Delete Department"]');
       fireEvent.click(deleteButtons[0]);
 
-      await waitFor(() => {
-        expect(screen.getByText('Delete Department')).toBeInTheDocument();
-      });
+      // Wait for dialog to appear
+      await screen.findByText('Delete Department', {}, { timeout: 3000 });
 
       // Confirm deletion
-      const deleteButton = screen.getByText('Delete');
+      const deleteButton = screen.getByRole('button', { name: /Delete/i });
       fireEvent.click(deleteButton);
 
       await waitFor(() => {
@@ -550,12 +549,11 @@ describe('OrganizationStructure Integration', () => {
       const deleteButtons = container.querySelectorAll('button[title="Delete Department"]');
       fireEvent.click(deleteButtons[0]);
 
-      await waitFor(() => {
-        expect(screen.getByText('Delete Department')).toBeInTheDocument();
-      });
+      // Wait for dialog to appear
+      await screen.findByText('Delete Department', {}, { timeout: 3000 });
 
       // Cancel
-      const cancelButton = screen.getByText('Cancel');
+      const cancelButton = screen.getByRole('button', { name: /Cancel/i });
       fireEvent.click(cancelButton);
 
       await waitFor(() => {

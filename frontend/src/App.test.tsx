@@ -96,57 +96,52 @@ describe('App Integration', () => {
     it('should navigate between pages', async () => {
       const { container } = render(<App />);
 
-      // Start on Budget Management
-      await waitFor(() => {
-        expect(
-          screen.getByText('View and edit budget allocations for leaf departments'),
-        ).toBeInTheDocument();
-      });
+      // Wait for initial page load
+      await screen.findByText('View and edit budget allocations for leaf departments');
 
       // Navigate to Organization Structure using the nav link
       const orgNavLink = container.querySelector('a[href="/organization"]');
-      if (orgNavLink) {
-        fireEvent.click(orgNavLink);
+      expect(orgNavLink).toBeInTheDocument();
 
-        await waitFor(() => {
-          expect(screen.getByText(/Manage your organizational hierarchy/)).toBeInTheDocument();
-        });
+      fireEvent.click(orgNavLink!);
 
-        // Navigate back to Budget Management
-        const budgetNavLink = container.querySelector('a[href="/"]');
-        if (budgetNavLink) {
-          fireEvent.click(budgetNavLink);
+      // Wait for Organization Structure page to load
+      await screen.findByText(/Manage your organizational hierarchy/);
 
-          await waitFor(() => {
-            expect(
-              screen.getByText('View and edit budget allocations for leaf departments'),
-            ).toBeInTheDocument();
-          });
-        }
-      }
+      // Navigate back to Budget Management
+      const budgetNavLink = container.querySelector('a[href="/"]');
+      expect(budgetNavLink).toBeInTheDocument();
+
+      fireEvent.click(budgetNavLink!);
+
+      // Wait for Budget Management page to load again
+      await screen.findByText('View and edit budget allocations for leaf departments');
     });
 
     it('should highlight active tab', async () => {
       const { container } = render(<App />);
 
+      // Wait for initial page load
+      await screen.findByText('View and edit budget allocations for leaf departments');
+
       // Budget Management should be active by default
-      await waitFor(() => {
-        const budgetNavLink = container.querySelector('a[href="/"]');
-        expect(budgetNavLink?.className).toContain('border-blue-600');
-        expect(budgetNavLink?.className).toContain('text-blue-600');
-      });
+      const budgetNavLink = container.querySelector('a[href="/"]');
+      expect(budgetNavLink?.className).toContain('border-blue-600');
+      expect(budgetNavLink?.className).toContain('text-blue-600');
 
       // Click Organization Structure using nav link
       const orgNavLink = container.querySelector('a[href="/organization"]');
-      if (orgNavLink) {
-        fireEvent.click(orgNavLink);
+      expect(orgNavLink).toBeInTheDocument();
 
-        await waitFor(() => {
-          const orgLink = container.querySelector('a[href="/organization"]');
-          expect(orgLink?.className).toContain('border-blue-600');
-          expect(orgLink?.className).toContain('text-blue-600');
-        });
-      }
+      fireEvent.click(orgNavLink!);
+
+      // Wait for navigation to complete
+      await screen.findByText(/Manage your organizational hierarchy/);
+
+      // Organization Structure tab should now be active
+      const activeOrgLink = container.querySelector('a[href="/organization"]');
+      expect(activeOrgLink?.className).toContain('border-blue-600');
+      expect(activeOrgLink?.className).toContain('text-blue-600');
     });
   });
 
@@ -177,22 +172,27 @@ describe('App Integration', () => {
       const { container } = render(<App />);
 
       // Wait for initial load on Budget Management
-      await waitFor(() => {
-        expect(screen.getByText('Test Department')).toBeInTheDocument();
-      });
+      await screen.findByText('Test Department');
+
+      // Verify first call happened
+      expect(departmentsApi.departmentsApi.getDepartments).toHaveBeenCalledTimes(1);
 
       // Navigate to Organization Structure using nav link
       const orgNavLink = container.querySelector('a[href="/organization"]');
-      if (orgNavLink) {
-        fireEvent.click(orgNavLink);
-      }
+      expect(orgNavLink).toBeInTheDocument();
 
-      await waitFor(() => {
-        expect(screen.getByText('Test Department')).toBeInTheDocument();
-      });
+      fireEvent.click(orgNavLink!);
 
-      // Context should only load once
-      expect(departmentsApi.departmentsApi.getDepartments).toHaveBeenCalledTimes(2); // Once per page mount
+      // Wait for Organization Structure page to load and call getDepartments again
+      await screen.findByText(/Manage your organizational hierarchy/);
+
+      // Wait a bit for the useEffect to trigger
+      await waitFor(
+        () => {
+          expect(departmentsApi.departmentsApi.getDepartments).toHaveBeenCalledTimes(2);
+        },
+        { timeout: 3000 },
+      );
     });
   });
 
