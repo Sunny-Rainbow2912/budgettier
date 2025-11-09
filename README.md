@@ -2,6 +2,12 @@
 
 A full-stack web application for managing departmental budgets with hierarchical tree visualization, inline editing, and automatic parent node aggregation.
 
+## 🚀 Live Demo
+
+**[https://budgettier-08819cd1c12e.herokuapp.com/](https://budgettier-08819cd1c12e.herokuapp.com/)**
+
+Try the live application deployed on Heroku! Explore budget management, organizational structure editing, and real-time aggregation.
+
 ## Quick Start
 
 ### Prerequisites
@@ -247,6 +253,8 @@ Total budget: **$2.41M allocated**, **$2.06M spent** (~85.5% utilization)
 Budgettier is ready for one-click deployment to Heroku:
 
 [![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
+**Live Example:** [https://budgettier-08819cd1c12e.herokuapp.com/](https://budgettier-08819cd1c12e.herokuapp.com/)
 
 **Or deploy manually:**
 
