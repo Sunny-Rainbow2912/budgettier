@@ -279,8 +279,6 @@ heroku open
 - SQLite database included (auto-seeded)
 - For production, consider upgrading to PostgreSQL
 
-See [HEROKU_DEPLOYMENT.md](./HEROKU_DEPLOYMENT.md) for detailed deployment guide.
-
 ## License
 
 MIT
