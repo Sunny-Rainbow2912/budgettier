@@ -18,6 +18,10 @@
     "PORT": {
       "description": "Port for the backend server",
       "value": "3000"
+    },
+    "CORS_ORIGIN": {
+      "description": "Comma-separated list of allowed CORS origins. Leave empty for same-origin (recommended for Heroku since frontend is served by backend)",
+      "required": false
     }
   },
   "formation": {

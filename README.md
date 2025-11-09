@@ -220,8 +220,8 @@ Total budget: **$2.41M allocated**, **$2.06M spent** (~85.5% utilization)
 
 **Backend:**
 
-- Runs on port 3000 by default
-- CORS enabled for frontend
+- `PORT` - Server port (default: 3000)
+- `CORS_ORIGIN` - Comma-separated allowed origins (default: localhost:5173,localhost:3000)
 - Global validation pipes for DTO validation
 
 ## Troubleshooting
